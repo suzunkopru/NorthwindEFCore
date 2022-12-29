@@ -1,0 +1,86 @@
+﻿@page "/ProductPage"
+@using Entities.Models
+@using DataAccess.Classes
+@inject DalProduct _dalProduct
+<PageTitle>Products List</PageTitle>
+<DxDataGrid Data="@_dalProduct.GetAll()"
+            AllowColumnDragDrop=true
+            AllowSort=true
+            ColumnResizeMode=DataGridColumnResizeMode.NextColumn
+            EditMode=DataGridEditMode.EditForm
+            PageSize=@clmName.pSize
+            SelectionMode=DataGridSelectionMode.MultipleSelectedDataRows
+            ShowColumnHeaders=true
+            ShowDetailRow=true
+            ShowFilterRow=true
+            ShowGroupedColumns=true
+            ShowGroupPanel=true
+            ShowPager=true
+            VerticalScrollBarMode=ScrollBarMode.Auto>
+    <Columns>
+        <DxDataGridColumn Field=@clmName.prdId
+                          Caption="@clmName.prdId"
+                          Width=@clmName.wdt></DxDataGridColumn>
+        <DxDataGridColumn Field=@clmName.prdName
+                          Caption=@clmName.prdName
+                          Width=@clmName.wdt
+                          AllowFilter=true></DxDataGridColumn>
+        <DxDataGridColumn Field=@clmName.supId
+                          Caption=@clmName.supId
+                          Width=@clmName.wdt></DxDataGridColumn>
+        <DxDataGridColumn Field=@clmName.catId
+                          Caption=@clmName.catId
+                          Width=@clmName.wdt></DxDataGridColumn>
+        <DxDataGridColumn Field=@clmName.qty
+                          Caption=@clmName.qty
+                          Width=@clmName.wdt></DxDataGridColumn>
+        <DxDataGridSpinEditColumn Field=@clmName.price
+                                  Caption=@clmName.price
+                                  Width=@clmName.wdt
+                                  DisplayFormat=n2
+                                  TextAlignment=DataGridTextAlign.Right>
+        </DxDataGridSpinEditColumn>
+        <DxDataGridSpinEditColumn Field=@clmName.stock
+                                  Caption=@clmName.stock
+                                  Width=@clmName.wdt
+                                  DisplayFormat=n2
+                                  TextAlignment=DataGridTextAlign.Right>
+        </DxDataGridSpinEditColumn>
+        <DxDataGridColumn Field=@clmName.order
+                          Caption=@clmName.order
+                          Width=@clmName.wdt></DxDataGridColumn>
+        <DxDataGridColumn Field=@clmName.disc
+                          Caption=@clmName.disc
+                          Width=@clmName.wdt></DxDataGridColumn>
+    </Columns>
+    <GroupSummary>
+        <DxDataGridSummaryItem SummaryType=SummaryItemType.Sum
+                               Field="@clmName.stock"
+                               DisplayFormat="{0:0,00.00} Adet" />
+    </GroupSummary>
+    <TotalSummary>
+        <DxDataGridSummaryItem Field=@clmName.stock
+                               SummaryType=SummaryItemType.Sum
+                               DisplayFormat="{0:0,00.00} Adet" />
+        <DxDataGridSummaryItem ShowInColumn=@clmName.prdId
+                               SummaryType=SummaryItemType.Count
+                               DisplayFormat="{0} adet" />
+    </TotalSummary>
+</DxDataGrid>
+@code {
+    (string prdId, string prdName,
+        string supId, string catId,
+        string qty, string price,
+        string stock, string order,
+        string disc, string @wdt, int pSize) clmName
+                = (prdId: nameof(Product.ProductId),
+                    prdName: nameof(Product.ProductName),
+                    supId: nameof(Product.SupplierId),
+                    catId: nameof(Product.CategoryId),
+                    qty: nameof(Product.QuantityPerUnit),
+                    price: nameof(Product.UnitPrice),
+                    stock: nameof(Product.UnitsInStock),
+                    order: nameof(Product.UnitsOnOrder),
+                    disc: nameof(Product.Discontinued),
+                    @wdt: 10 + "px", pSize: 10);
+}
