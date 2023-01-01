@@ -40,14 +40,14 @@ public partial class frmProduct : Form
     }
     private void CmbCatLoad()
     {
-        cmbCategoryID.DataSource = 
+        cmbCategoryID.DataSource =
         cmbCategories.DataSource = dalCategory.GetAll().ToList();
         cmbCategories.DisplayMember = cmbCategoryID.DisplayMember =
             nameof(Category.CategoryName);
         cmbCategories.ValueMember = cmbCategoryID.ValueMember
             = nameof(Category.CategoryId);
     }
-    private void cmbCategories_SelectedIndexChanged
+    private void cmbCategories_SelectionChangeCommitted
                         (object sender, EventArgs e)
     {
         var cmb = sender as ComboBox;
@@ -72,9 +72,9 @@ public partial class frmProduct : Form
     private void btnEkle_Click(object sender, EventArgs e)
     {
         var product = new Product();
-        CRUEntity(CrudType.Insert, product);
+        CUDEntity(CUDType.Insert, product);
         DgwFormat(dgwProducts);
-        dgwProducts.DataSource = ProductIncludeData();
+        //dgwProducts.DataSource = ProductIncludeData();
         MessageBox.Show($@"{product} Eklendi");
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
@@ -83,9 +83,9 @@ public partial class frmProduct : Form
     {
         var product = new Product();
         int satir = dgwProducts.SelectedRows[0].Index;
-        CRUEntity(CrudType.Update, product);
+        CUDEntity(CUDType.Update, product);
         DgwFormat(dgwProducts);
-        dgwProducts.DataSource = ProductIncludeData();
+        //dgwProducts.DataSource = ProductIncludeData();
         MessageBox.Show($"{product} Güncellendi");
         dgwProducts.Rows[satir].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[satir].Cells[1];
@@ -94,16 +94,16 @@ public partial class frmProduct : Form
     {
         if (dgwProducts.CurrentRow == null) return;
         var product = new Product();
-        CRUEntity(CrudType.Delete, product);
+        CUDEntity(CUDType.Delete, product);
         DgwFormat(dgwProducts);
-        dgwProducts.DataSource = ProductIncludeData();
+        //dgwProducts.DataSource = ProductIncludeData();
         MessageBox.Show($"{product} Silindi");
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
     }
-    private async Task CRUEntity(CrudType cruType, Product prd)
+    private async Task CUDEntity(CUDType cruType, Product prd)
     {
-        prd.ProductId = cruType == CrudType.Insert ? 0 :
+        prd.ProductId = cruType == CUDType.Insert ? 0 :
             ToInt32(dgwProducts.CurrentRow.Cells[0].Value);
         prd.ProductName = txtProductName.Text;
         prd.SupplierId = ToInt32(cmbSupplierID.SelectedValue);
@@ -116,13 +116,13 @@ public partial class frmProduct : Form
         prd.Discontinued = rdbDiscontinued.Checked;
         switch (cruType)
         {
-            case CrudType.Insert:
+            case CUDType.Insert:
                 await dalProduct.AddAsync(prd);
                 break;
-            case CrudType.Update:
+            case CUDType.Update:
                 dalProduct.Update(prd);
                 break;
-            case CrudType.Delete:
+            case CUDType.Delete:
                 dalProduct.Remove(prd);
                 break;
         }
@@ -130,7 +130,7 @@ public partial class frmProduct : Form
     private void dgwProducts_CellClick
             (object sender, DataGridViewCellEventArgs e)
     {
-        CrudControl();
+        CUDControl();
         GridToControl(sender);
     }
     private void GridToControl(object sender)
@@ -148,18 +148,18 @@ public partial class frmProduct : Form
         rdbDiscontinued.Checked = ToBoolean(row.Cells[9].Value);
     }
     private void btnEkle_MouseMove(object sender,
-            MouseEventArgs e) => CrudControl(sender);
+            MouseEventArgs e) => CUDControl(sender);
     private void btnGuncelle_MouseMove(object sender,
-            MouseEventArgs e) => CrudControl(sender);
+            MouseEventArgs e) => CUDControl(sender);
     private void btnSil_MouseHover(object sender,
-            EventArgs e) => CrudControl(sender);
+            EventArgs e) => CUDControl(sender);
     private void btnEkle_Enter(object sender,
-            EventArgs e) => CrudControl(sender);
+            EventArgs e) => CUDControl(sender);
     private void btnGuncelle_Enter(object sender,
-            EventArgs e) => CrudControl(sender);
+            EventArgs e) => CUDControl(sender);
     private void btnSil_Enter(object sender,
-            EventArgs e) => CrudControl(sender);
-    private void CrudControl(object sender = null)
+            EventArgs e) => CUDControl(sender);
+    private void CUDControl(object sender = null)
     {
         var button = (Button)sender;
         if (button == null || context == null) return;
@@ -189,9 +189,13 @@ public partial class frmProduct : Form
          EventArgs e) => txtProductId.Text = "";
     private void btnTumu_Click(object sender, EventArgs e)
     {
+        int satir = dgwProducts.SelectedRows.Count > 0 
+            ? dgwProducts.SelectedRows[0].Index 
+            : dgwProducts.Rows[^1].Index;
         DgwFormat(dgwProducts);
         dgwProducts.DataSource = ProductIncludeData();
         txtAra.Clear();
+        dgwProducts.CurrentCell = dgwProducts.Rows[satir].Cells[1];
     }
     private void btnCategories_Click(object sender, EventArgs e)
     {
@@ -225,9 +229,9 @@ public partial class frmProduct : Form
         dgw.AllowUserToAddRows = false;
         dgw.SelectionMode =
             DataGridViewSelectionMode.FullRowSelect;
-        dgw.AutoSizeRowsMode = 
+        dgw.AutoSizeRowsMode =
             DataGridViewAutoSizeRowsMode.DisplayedCells;
-        dgw.AutoSizeColumnsMode = 
+        dgw.AutoSizeColumnsMode =
             DataGridViewAutoSizeColumnsMode.Fill;
     }
 }

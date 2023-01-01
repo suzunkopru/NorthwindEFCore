@@ -38,6 +38,7 @@
             this.grbProduct = new System.Windows.Forms.GroupBox();
             this.btnTumu = new System.Windows.Forms.Button();
             this.grbUrunler = new System.Windows.Forms.GroupBox();
+            this.btnDTO = new System.Windows.Forms.Button();
             this.btnSupplier = new System.Windows.Forms.Button();
             this.btnYeni = new System.Windows.Forms.Button();
             this.rdbDiscontinued = new System.Windows.Forms.RadioButton();
@@ -63,7 +64,6 @@
             this.txtProductName = new System.Windows.Forms.TextBox();
             this.lblProductName = new System.Windows.Forms.Label();
             this.dgwProductCatName = new System.Windows.Forms.DataGridView();
-            this.btnDTO = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwProducts)).BeginInit();
             this.grbCategories.SuspendLayout();
             this.grbProduct.SuspendLayout();
@@ -91,7 +91,7 @@
             this.cmbCategories.Name = "cmbCategories";
             this.cmbCategories.Size = new System.Drawing.Size(121, 23);
             this.cmbCategories.TabIndex = 0;
-            this.cmbCategories.SelectedIndexChanged += new System.EventHandler(this.cmbCategories_SelectedIndexChanged);
+            this.cmbCategories.SelectionChangeCommitted += new System.EventHandler(this.cmbCategories_SelectionChangeCommitted);
             // 
             // lblKategoriler
             // 
@@ -210,6 +210,18 @@
             this.grbUrunler.TabIndex = 6;
             this.grbUrunler.TabStop = false;
             this.grbUrunler.Text = "Ürünler";
+            // 
+            // btnDTO
+            // 
+            this.btnDTO.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.btnDTO.Location = new System.Drawing.Point(793, 85);
+            this.btnDTO.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnDTO.Name = "btnDTO";
+            this.btnDTO.Size = new System.Drawing.Size(88, 27);
+            this.btnDTO.TabIndex = 22;
+            this.btnDTO.Text = "DTO";
+            this.btnDTO.UseVisualStyleBackColor = false;
+            this.btnDTO.Click += new System.EventHandler(this.btnDTO_Click);
             // 
             // btnSupplier
             // 
@@ -465,18 +477,6 @@
             this.dgwProductCatName.RowTemplate.Height = 25;
             this.dgwProductCatName.Size = new System.Drawing.Size(431, 321);
             this.dgwProductCatName.TabIndex = 21;
-            // 
-            // btnDTO
-            // 
-            this.btnDTO.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.btnDTO.Location = new System.Drawing.Point(793, 85);
-            this.btnDTO.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.btnDTO.Name = "btnDTO";
-            this.btnDTO.Size = new System.Drawing.Size(88, 27);
-            this.btnDTO.TabIndex = 22;
-            this.btnDTO.Text = "DTO";
-            this.btnDTO.UseVisualStyleBackColor = false;
-            this.btnDTO.Click += new System.EventHandler(this.btnDTO_Click);
             // 
             // frmProduct
             // 

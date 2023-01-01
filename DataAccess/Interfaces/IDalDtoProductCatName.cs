@@ -1,4 +1,4 @@
-﻿using Entities.DTO;
+﻿using Entities.DTOs;
 using Entities.Models;
 namespace DataAccess.Interfaces;
 public interface IDalDtoProductCatName : IEntityRepo<Product>

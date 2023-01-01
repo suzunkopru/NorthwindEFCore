@@ -20,27 +20,27 @@ public class EntityRepo<T> : IEntityRepo<T>
     public async Task<bool> AnyAsync
         (Expression<Func<T, bool>> predicate)
         => await _dbSet.AnyAsync(predicate);
-    private async Task Crud(T entity, EntityState state)
+    private async Task CUD(T entity, EntityState state)
     {
         _context.Entry(entity).State = state;
         await _context.SaveChangesAsync();
         _context.Entry(entity).State = EntityState.Detached;
     }
     public async Task AddAsync(T entity)
-        => await Task.FromResult(Crud(entity, EntityState.Added));
+        => await Task.FromResult(CUD(entity, EntityState.Added));
     public async Task AddRangeAsync(IQueryable<T> entities)
     {
         foreach (var x in entities) await AddAsync(x);
     }
     public void Update(T entity)
-        => Task.FromResult(Crud(entity, EntityState.Modified));
+        => Task.FromResult(CUD(entity, EntityState.Modified));
     public void RemoveRange(IQueryable<T> entities)
         => entities.ToList().ForEach(Remove);
     public void Remove(T entity)
     {
         try
         {
-            Task.FromResult(Crud(entity, EntityState.Deleted));
+            Task.FromResult(CUD(entity, EntityState.Deleted));
         }
         catch (DbUpdateException ex)
         {
@@ -49,7 +49,7 @@ public class EntityRepo<T> : IEntityRepo<T>
         }
     }
 }
-public enum CrudType
+public enum CUDType
 {
     Insert, Update, Delete
 }

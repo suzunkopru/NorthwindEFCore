@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Entities.Models;
 
-public partial class Supplier
+public partial class Customer
 {
-    public int SupplierId { get; set; }
+    public string CustomerId { get; set; }
 
     public string CompanyName { get; set; }
 
@@ -29,7 +29,5 @@ public partial class Supplier
 
     public string Fax { get; set; }
 
-    public string HomePage { get; set; }
-
-    public virtual ICollection<Product> Products { get; } = new List<Product>();
+    public virtual ICollection<Order> Orders { get; } = new List<Order>();
 }
