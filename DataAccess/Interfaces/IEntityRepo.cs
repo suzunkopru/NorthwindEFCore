@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+﻿ using System.Linq.Expressions;
 namespace DataAccess.Interfaces;
 public interface IEntityRepo<T>
     where T : class, new()
