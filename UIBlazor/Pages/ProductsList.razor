@@ -1,7 +1,7 @@
 ﻿@page "/ProductPage"
 @using Entities.Models
-@using DataAccess.Classes
-@inject DalProduct _dalProduct
+@using DataAccess.Interfaces
+@inject IDalProduct _dalProduct
 <PageTitle>Products List</PageTitle>
 <DxDataGrid Data="@_dalProduct.GetAll()"
             AllowColumnDragDrop=true
