@@ -3,7 +3,7 @@ public partial class frmProdCatSup : Form
 {
     private readonly NorthwindContext context;
     private readonly DalVwProdCatSup dalVwProdCatSup;
-    //private frmProduct frm = new();
+    private frmProduct frm = new();
     public frmProdCatSup()
     {
         InitializeComponent();
@@ -12,7 +12,7 @@ public partial class frmProdCatSup : Form
     }
     private void frmProdCatSup_Load(object sender, EventArgs e)
     {
-        //frm.DgwFormat(dgwProdCatSup);
+        frm.DgwFormat(dgwProdCatSup);
         dgwProdCatSup.DataSource = dalVwProdCatSup.GetAll().ToList();
         dgwProdCatSup.AutoResizeRows();
     }

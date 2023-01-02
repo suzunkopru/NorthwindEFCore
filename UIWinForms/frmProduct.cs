@@ -1,23 +1,35 @@
-﻿using Entities.Models;
+﻿using DataAccess.Interfaces;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using static System.Convert;
 namespace UIWinForms;
+
 public partial class frmProduct : Form
 {
     private readonly NorthwindContext context;
-    private readonly DalCategory dalCategory;
-    private readonly DalProduct dalProduct;
-    private readonly DalDtoProductCatName dalPrdCatName;
-    private readonly DalSupplier dalSupplier;
-    public frmProduct()
+    private readonly IDalCategory dalCategory;
+    private readonly IDalProduct dalProduct;
+    private readonly IDalDtoProductCatName dalPrdCatName;
+    private readonly IDalSupplier dalSupplier;
+    private readonly IDalCustomer dalCustomer;
+    private readonly IDalEmployee dalEmployee;
+    private readonly IDalOrder dalOrder;
+    private readonly IDalRegion dalRegion;
+    private readonly IDalShipper dalShipper;
+    private readonly IDalTerritory dalTerritory;
+    public frmProduct(
+                      IDalProduct p_dalProduct,
+                      IDalDtoProductCatName p_dalPrdCatName,
+                      IDalCategory p_dalCategory,
+                      IDalSupplier p_dalSupplier)
     {
-        context = new();
-        dalProduct = new DalProduct(context);
-        dalCategory = new DalCategory(context);
-        dalSupplier = new DalSupplier(context);
-        dalPrdCatName = new DalDtoProductCatName(context);
+        dalProduct = p_dalProduct;
+        dalPrdCatName = p_dalPrdCatName;
+        dalCategory = p_dalCategory;
+        dalSupplier = p_dalSupplier;
         InitializeComponent();
     }
+    public frmProduct() { }
     private void frmProduct_Load(object sender, EventArgs e)
     {
         dgwProducts.DataSource = ProductIncludeData();
@@ -74,7 +86,6 @@ public partial class frmProduct : Form
         var product = new Product();
         CUDEntity(CUDType.Insert, product);
         DgwFormat(dgwProducts);
-        //dgwProducts.DataSource = ProductIncludeData();
         MessageBox.Show($@"{product} Eklendi");
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
@@ -85,7 +96,6 @@ public partial class frmProduct : Form
         int satir = dgwProducts.SelectedRows[0].Index;
         CUDEntity(CUDType.Update, product);
         DgwFormat(dgwProducts);
-        //dgwProducts.DataSource = ProductIncludeData();
         MessageBox.Show($"{product} Güncellendi");
         dgwProducts.Rows[satir].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[satir].Cells[1];
@@ -96,7 +106,6 @@ public partial class frmProduct : Form
         var product = new Product();
         CUDEntity(CUDType.Delete, product);
         DgwFormat(dgwProducts);
-        //dgwProducts.DataSource = ProductIncludeData();
         MessageBox.Show($"{product} Silindi");
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
@@ -189,13 +198,14 @@ public partial class frmProduct : Form
          EventArgs e) => txtProductId.Text = "";
     private void btnTumu_Click(object sender, EventArgs e)
     {
-        int satir = dgwProducts.SelectedRows.Count > 0 
-            ? dgwProducts.SelectedRows[0].Index 
-            : dgwProducts.Rows[^1].Index;
         DgwFormat(dgwProducts);
         dgwProducts.DataSource = ProductIncludeData();
         txtAra.Clear();
+        int satir = dgwProducts.SelectedRows.Count > 1
+            ? dgwProducts.SelectedRows[0].Index
+            : dgwProducts.RowCount - 1;
         dgwProducts.CurrentCell = dgwProducts.Rows[satir].Cells[1];
+        dgwProducts_CellClick(dgwProducts, null);
     }
     private void btnCategories_Click(object sender, EventArgs e)
     {
