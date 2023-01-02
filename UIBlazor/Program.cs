@@ -1,16 +1,5 @@
-using DataAccess.Classes;
-using DataAccess.Interfaces;
-using Entities.Context;
-using UIBlazor.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddDbContext<NorthwindContext>();
-builder.Services.AddScoped<IDalCategory, DalCategory>();
-builder.Services.AddScoped<IDalProduct, DalProduct>();
-builder.Services.AddDevExpressBlazor();
-var app = builder.Build();
+using UIBlazor.Services;
+var app = ServiceBuilder.Builder();
 if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 app.UseStaticFiles();
