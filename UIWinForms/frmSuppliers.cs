@@ -3,7 +3,7 @@ public partial class frmSuppliers: Form
 {
     private readonly NorthwindContext context;
     private readonly DalSupplier dalSupplier;
-    private frmProduct frm = new();
+    //private frmProduct frm = new();
     public frmSuppliers()
     {
         InitializeComponent();
@@ -12,7 +12,7 @@ public partial class frmSuppliers: Form
     }
     private void frmSuppliers_Load(object sender, EventArgs e)
     {
-        frm.DgwFormat(dgwSuppliers);
+        //frm.DgwFormat(dgwSuppliers);
         dgwSuppliers.DataSource = dalSupplier.GetAll().ToList();
         dgwSuppliers.AutoResizeRows();
     }
