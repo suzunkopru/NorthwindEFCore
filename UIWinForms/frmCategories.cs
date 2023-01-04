@@ -1,14 +1,13 @@
-﻿namespace UIWinForms;
+﻿using DataAccess.Interfaces;
+namespace UIWinForms;
 public partial class frmCategories : Form
 {
-    private readonly NorthwindContext context;
-    private readonly DalCategory dalCategory;
+    private readonly IDalCategory dalCategory;
     private frmProduct frm = new();
-    public frmCategories()
+    public frmCategories(IDalCategory p_dalCategory)
     {
+        dalCategory = p_dalCategory;
         InitializeComponent();
-        context = new NorthwindContext();
-        dalCategory = new DalCategory(context!);
     }
     private void frmCategories_Load(object sender, EventArgs e)
     {

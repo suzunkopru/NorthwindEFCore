@@ -209,12 +209,12 @@ public partial class frmProduct : Form
     }
     private void btnCategories_Click(object sender, EventArgs e)
     {
-        var frmOpen = new frmCategories();
+        var frmOpen = new frmCategories(dalCategory);
         frmOpen.Show();
     }
     private void btnSupplier_Click(object sender, EventArgs e)
     {
-        var frmOpen = new frmSuppliers();
+        var frmOpen = new frmSuppliers(dalSupplier);
         frmOpen.Show();
     }
     private void btnDTO_Click(object sender, EventArgs e)

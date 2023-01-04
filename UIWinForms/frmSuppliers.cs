@@ -1,14 +1,13 @@
-﻿namespace UIWinForms;
+﻿using DataAccess.Interfaces;
+namespace UIWinForms;
 public partial class frmSuppliers: Form
 {
-    private readonly NorthwindContext context;
-    private readonly DalSupplier dalSupplier;
+    private readonly IDalSupplier dalSupplier;
     private frmProduct frm = new();
-    public frmSuppliers()
+    public frmSuppliers(IDalSupplier p_dalSupplier)
     {
         InitializeComponent();
-        context = new NorthwindContext();
-        dalSupplier = new DalSupplier(context!);
+        dalSupplier = p_dalSupplier;
     }
     private void frmSuppliers_Load(object sender, EventArgs e)
     {
