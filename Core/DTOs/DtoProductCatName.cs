@@ -1,4 +1,4 @@
-﻿namespace Entities.DTOs;
+﻿namespace Core.DTOs;
 public class DtoProductCatName
 {
     public int ProductID { get; set; }

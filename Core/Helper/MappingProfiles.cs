@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
-using Entities.DTOs;
+using Core.DTOs;
 using Entities.Models;
-namespace Entities.Helper;
+using DtoOrder = Core.DTOs.DtoOrder;
+
+namespace Core.Helper;
 public class MappingProfiles : Profile
 {
     public MappingProfiles()
@@ -9,11 +11,13 @@ public class MappingProfiles : Profile
         CreateMap<Category, DtoCategory>().ReverseMap();
         CreateMap<Customer, DtoCustomer>().ReverseMap();
         CreateMap<Employee, DtoEmployee>().ReverseMap();
+        CreateMap<DtoOrder, DtoOrder>().ReverseMap();
         CreateMap<Product, DtoProduct>().ReverseMap(); 
         CreateMap<Region, DtoRegion>().ReverseMap();
         CreateMap<Shipper, DtoShipper>().ReverseMap();
         CreateMap<Supplier, DtoSupplier>().ReverseMap();
         CreateMap<Territory, DtoTerritory>().ReverseMap()
-        .ForMember(m => m.Region, opt => opt.MapFrom(src => src.Region));
+        .ForMember(terr => terr.Region,
+            opt => opt.MapFrom(dto => dto.Region));
     }
 }

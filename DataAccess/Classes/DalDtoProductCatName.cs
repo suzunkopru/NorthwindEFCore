@@ -1,6 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using Entities.Context;
-using Entities.DTOs;
+using Core.DTOs;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 namespace DataAccess.Classes;
