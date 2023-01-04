@@ -3,7 +3,7 @@
 @using DataAccess.Interfaces
 @inject IDalProduct _dalProduct
 <PageTitle>Products List</PageTitle>
-<DxDataGrid Data="@_dalProduct.GetAll()"
+<DxDataGrid Data=@_dalProduct.GetAll()
             AllowColumnDragDrop=true
             AllowSort=true
             ColumnResizeMode=DataGridColumnResizeMode.NextColumn
@@ -18,6 +18,7 @@
             ShowPager=true
             VerticalScrollBarMode=ScrollBarMode.Auto>
     <Columns>
+        <DxDataGridCommandColumn Width="10px" />
         <DxDataGridColumn Field=@clmName.prdId
                           Caption="@clmName.prdId"
                           Width=@clmName.wdt></DxDataGridColumn>
