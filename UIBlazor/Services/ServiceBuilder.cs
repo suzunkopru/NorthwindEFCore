@@ -14,6 +14,8 @@ public static class ServiceBuilder
         builder.Services.AddDbContext<NorthwindContext>();
         builder.Services.AddScoped<IDalCategory, DalCategory>();
         builder.Services.AddScoped<IDalProduct, DalProduct>();
+        builder.Services.AddAutoMapper
+                    (typeof(Program).Assembly);
         builder.Services.AddDevExpressBlazor();
         return builder.Build(); ;
     }
