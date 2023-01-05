@@ -1,4 +1,5 @@
 using Autofac;
+using Core.Helper;
 using DataAccess.Interfaces;
 namespace UIWinForms;
 internal static class Program
@@ -12,6 +13,7 @@ internal static class Program
                 Configure().Resolve<IDalProduct>(),
                 Configure().Resolve<IDalDtoProductCatName>(),
                 Configure().Resolve<IDalCategory>(),
-                Configure().Resolve<IDalSupplier>()));
+                Configure().Resolve<IDalSupplier>(), 
+                new MappingProfiles().MatchMap()));
     }
 }
