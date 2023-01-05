@@ -16,5 +16,15 @@ public class MappingProfiles : Profile
         CreateMap<Territory, DtoTerritory>().ReverseMap()
             .ForMember(dest => dest.Region,
                 opt => opt.MapFrom(src => src.Region));
+   }
+    public Mapper MatchMap() => new
+    (new MapperConfiguration(x => x
+                    .AddProfile(new MappingProfiles())));
+    /*private MapperConfiguration MapConfig()
+    {
+        MappingProfiles mappingProfile = new();
+        MapperConfiguration config = new(x => x.AddProfile(mappingProfile));
+        return config;
     }
+    public Mapper MatchMap() => new Mapper(MapConfig());*/
 }
