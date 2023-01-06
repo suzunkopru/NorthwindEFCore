@@ -2,6 +2,7 @@
 using Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace DataAccess.Classes;
 public class EntityRepo<T> : IEntityRepo<T>
     where T : class, new()
