@@ -1,9 +1,11 @@
 ﻿@page "/ProductPage"
 @using Entities.Models
-@using DataAccess.Interfaces
+@using DataAccess.Interfaces 
+@using Core.DTOs
 @inject IDalProduct _dalProduct
+@inject AutoMapper.IMapper _mapper
 <PageTitle>Products List</PageTitle>
-<DxDataGrid Data=@_dalProduct.GetAll()
+<DxDataGrid Data=@GetAllProduct()
             AllowColumnDragDrop=true
             AllowSort=true
             ColumnResizeMode=DataGridColumnResizeMode.NextColumn
@@ -84,4 +86,6 @@
                     order: nameof(Product.UnitsOnOrder),
                     disc: nameof(Product.Discontinued),
                     @wdt: 10 + "px", pSize: 10);
+    public List<DtoProduct> GetAllProduct()
+        => _mapper.Map<List<DtoProduct>>(_dalProduct.GetAll());
 }

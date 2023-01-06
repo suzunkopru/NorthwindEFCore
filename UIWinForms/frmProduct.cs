@@ -1,9 +1,10 @@
-﻿using DataAccess.Interfaces;
+﻿using AutoMapper;
+using Core.DTOs;
+using DataAccess.Interfaces;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using static System.Convert;
 namespace UIWinForms;
-
 public partial class frmProduct : Form
 {
     private readonly NorthwindContext context;
@@ -17,22 +18,26 @@ public partial class frmProduct : Form
     private readonly IDalRegion dalRegion;
     private readonly IDalShipper dalShipper;
     private readonly IDalTerritory dalTerritory;
+    private readonly IMapper mapper;
     public frmProduct(
                       IDalProduct p_dalProduct,
                       IDalDtoProductCatName p_dalPrdCatName,
                       IDalCategory p_dalCategory,
-                      IDalSupplier p_dalSupplier)
+                      IDalSupplier p_dalSupplier,
+                      IMapper p_mapper)
     {
         dalProduct = p_dalProduct;
         dalPrdCatName = p_dalPrdCatName;
         dalCategory = p_dalCategory;
         dalSupplier = p_dalSupplier;
+        mapper = p_mapper;
         InitializeComponent();
     }
     public frmProduct() { }
     private void frmProduct_Load(object sender, EventArgs e)
     {
-        dgwProducts.DataSource = ProductIncludeData();
+        dgwProducts.DataSource = 
+                mapper.Map<List<DtoProduct>>(ProductIncludeData());
         DgwFormat(dgwProducts);
         dgwProductCatName.DataSource =
             dalPrdCatName.GetProductsCatName().ToList();
@@ -46,14 +51,18 @@ public partial class frmProduct : Form
                 .Include(x => x.Supplier).ToList();
     private void CmbSupLoad()
     {
-        cmbSupplierID.DataSource = dalSupplier.GetAll().ToList();
+        cmbSupplierID.DataSource = 
+            mapper.Map<List<DtoSupplier>>(dalSupplier.GetAll());
+            //dalSupplier.GetAll().ToList();
         cmbSupplierID.DisplayMember = nameof(Supplier.CompanyName);
         cmbSupplierID.ValueMember = nameof(Supplier.SupplierId);
     }
     private void CmbCatLoad()
     {
         cmbCategoryID.DataSource =
-        cmbCategories.DataSource = dalCategory.GetAll().ToList();
+        cmbCategories.DataSource = 
+                mapper.Map<List<DtoCategory>>(dalCategory.GetAll());
+                //dalCategory.GetAll().ToList();
         cmbCategories.DisplayMember = cmbCategoryID.DisplayMember =
             nameof(Category.CategoryName);
         cmbCategories.ValueMember = cmbCategoryID.ValueMember
@@ -67,9 +76,9 @@ public partial class frmProduct : Form
             int.TryParse(cmb.SelectedValue.ToString(),
                          out var catID);
         if (isCatID)
-            dgwProducts.DataSource =
-                dalPrdCatName.GetProductsByCatergory(catID)
-                 .ToList();
+            dgwProducts.DataSource = mapper.Map<List<DtoProduct>>
+                (dalPrdCatName.GetProductsByCatergory(catID));
+        //dalPrdCatName.GetProductsByCatergory(catID).ToList();
     }
     private void txtProductFind_TextChanged
                 (object sender, EventArgs e)
@@ -77,41 +86,49 @@ public partial class frmProduct : Form
         if (sender is TextBox { TextLength: > 2 } txt)
             dgwProducts.DataSource =
                 string.IsNullOrWhiteSpace(txt.Text)
-                ? dalProduct.GetAll().ToList()
-                : dalPrdCatName.Where(x => x.ProductName
-                    .Contains(txt.Text)).ToList();
+                    ? mapper.Map<List<DtoProduct>>(dalProduct.GetAll())
+                    //dalProduct.GetAll().ToList()
+                    : mapper.Map<List<DtoProduct>>
+                    (dalPrdCatName.Where(x => x.ProductName
+                        .Contains(txt.Text)).ToList());
+        //dalPrdCatName.Where(x => x.ProductName.Contains(txt.Text)).ToList();
     }
     private void btnEkle_Click(object sender, EventArgs e)
     {
-        var product = new Product();
-        CUDEntity(CUDType.Insert, product);
+        Task.WaitAll(CUDEntity(CUDType.Insert));
         DgwFormat(dgwProducts);
-        MessageBox.Show($@"{product} Eklendi");
+        MessageBox.Show($@"{txtProductName.Text} Eklendi");
+        dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
+            ProductIncludeData());
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
     }
     private void btnGuncelle_Click(object sender, EventArgs e)
     {
-        var product = new Product();
         int satir = dgwProducts.SelectedRows[0].Index;
-        CUDEntity(CUDType.Update, product);
+        Task.WaitAll(CUDEntity(CUDType.Update));
         DgwFormat(dgwProducts);
-        MessageBox.Show($"{product} Güncellendi");
+        string old = dgwProducts.CurrentRow.Cells[1].Value.ToString();
+        MessageBox.Show($"{old} => {txtProductName.Text} olarak Güncellendi");
+        dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
+            ProductIncludeData());
         dgwProducts.Rows[satir].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[satir].Cells[1];
     }
     private void btnSil_Click(object sender, EventArgs e)
     {
         if (dgwProducts.CurrentRow == null) return;
-        var product = new Product();
-        CUDEntity(CUDType.Delete, product);
+        Task.WaitAll(CUDEntity(CUDType.Delete));
         DgwFormat(dgwProducts);
-        MessageBox.Show($"{product} Silindi");
+        MessageBox.Show($"{txtProductName.Text} Silindi");
+        dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
+            ProductIncludeData());
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
     }
-    private async Task CUDEntity(CUDType cruType, Product prd)
+    private async Task CUDEntity(CUDType cruType)
     {
+        var prd = new DtoProduct();
         prd.ProductId = cruType == CUDType.Insert ? 0 :
             ToInt32(dgwProducts.CurrentRow.Cells[0].Value);
         prd.ProductName = txtProductName.Text;
@@ -123,16 +140,17 @@ public partial class frmProduct : Form
         prd.UnitsOnOrder = ToInt16(txtUnitsOnOrder.Text);
         prd.ReorderLevel = ToInt16(txtReorderLevel.Text);
         prd.Discontinued = rdbDiscontinued.Checked;
+        var prdMap = mapper.Map<Product>(prd);
         switch (cruType)
         {
             case CUDType.Insert:
-                await dalProduct.AddAsync(prd);
+                await dalProduct.AddAsync(prdMap);
                 break;
             case CUDType.Update:
-                dalProduct.Update(prd);
+                dalProduct.Update(prdMap);
                 break;
             case CUDType.Delete:
-                dalProduct.Remove(prd);
+                dalProduct.Remove(prdMap);
                 break;
         }
     }
@@ -199,7 +217,8 @@ public partial class frmProduct : Form
     private void btnTumu_Click(object sender, EventArgs e)
     {
         DgwFormat(dgwProducts);
-        dgwProducts.DataSource = ProductIncludeData();
+        dgwProducts.DataSource =
+            mapper.Map<List<DtoProduct>>(ProductIncludeData()); 
         txtAra.Clear();
         int satir = dgwProducts.SelectedRows.Count > 1
             ? dgwProducts.SelectedRows[0].Index
@@ -209,12 +228,12 @@ public partial class frmProduct : Form
     }
     private void btnCategories_Click(object sender, EventArgs e)
     {
-        var frmOpen = new frmCategories(dalCategory);
+        var frmOpen = new frmCategories(dalCategory, mapper);
         frmOpen.Show();
     }
     private void btnSupplier_Click(object sender, EventArgs e)
     {
-        var frmOpen = new frmSuppliers(dalSupplier);
+        var frmOpen = new frmSuppliers(dalSupplier, mapper);
         frmOpen.Show();
     }
     private void btnDTO_Click(object sender, EventArgs e)
