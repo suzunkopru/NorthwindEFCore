@@ -95,7 +95,7 @@ public partial class frmProduct : Form
     }
     private void btnEkle_Click(object sender, EventArgs e)
     {
-        Task.WaitAll(CUDEntity(CUDType.Insert));
+        CUDEntity(CUDType.Insert);
         DgwFormat(dgwProducts);
         MessageBox.Show($@"{txtProductName.Text} Eklendi");
         dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
@@ -106,7 +106,7 @@ public partial class frmProduct : Form
     private void btnGuncelle_Click(object sender, EventArgs e)
     {
         int satir = dgwProducts.SelectedRows[0].Index;
-        Task.WaitAll(CUDEntity(CUDType.Update));
+        CUDEntity(CUDType.Update);
         DgwFormat(dgwProducts);
         string old = dgwProducts.CurrentRow.Cells[1].Value.ToString();
         MessageBox.Show($"{old} => {txtProductName.Text} olarak Güncellendi");
@@ -118,7 +118,7 @@ public partial class frmProduct : Form
     private void btnSil_Click(object sender, EventArgs e)
     {
         if (dgwProducts.CurrentRow == null) return;
-        Task.WaitAll(CUDEntity(CUDType.Delete));
+        CUDEntity(CUDType.Delete);
         DgwFormat(dgwProducts);
         MessageBox.Show($"{txtProductName.Text} Silindi");
         dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
@@ -144,7 +144,7 @@ public partial class frmProduct : Form
         switch (cruType)
         {
             case CUDType.Insert:
-                await dalProduct.AddAsync(prdMap);
+                await dalProduct.AddAsync(prdMap).ConfigureAwait(false);
                 break;
             case CUDType.Update:
                 dalProduct.Update(prdMap);
