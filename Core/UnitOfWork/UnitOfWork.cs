@@ -1,44 +1,32 @@
 ﻿using Entities.Context;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
+using static Core.Helper.TranLevel;
 namespace Core.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly NorthwindContext _context;
-    private IDbContextTransaction _transaction;
+    private TransactionScope _transaction;
     public UnitOfWork(NorthwindContext context)
                         => _context = context;
-    public void Commit()
+    public void Commit() => WithTransaction(false);
+    public Task CommitAsync()
     {
-        using (_transaction =
-                   _context.Database.BeginTransaction())
-        {
-            try
-            {
-                _context.SaveChanges();
-                _transaction.Commit();
-            }
-            catch (Exception e)
-            {
-                _transaction.Rollback();
-                throw new Exception($"{e.Message}");
-            }
-        }
+        WithTransaction();
+        return Task.CompletedTask;
     }
-    public async Task CommitAsync()
+    private void WithTransaction(bool isAsync = true)
     {
-        await using (_transaction = await
-                   _context.Database.BeginTransactionAsync())
-        {
+        using (_transaction = TranWithNoLock())
             try
             {
-                await _context.SaveChangesAsync();
-                await _transaction.CommitAsync();
+                if (!isAsync) _context.SaveChanges();
+                else _context.SaveChangesAsync();
+                _transaction.Complete();
             }
-            catch (Exception e)
+            catch (TransactionAbortedException e)
             {
-                await _transaction.RollbackAsync();
+                _transaction.Dispose();
                 throw new Exception($"{e.Message}");
             }
-        }
     }
 }
