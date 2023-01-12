@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using DataAccess.Interfaces;
-
 namespace Business.Classes;
 public class Service<T> : IService<T>
     where T : class, new()
