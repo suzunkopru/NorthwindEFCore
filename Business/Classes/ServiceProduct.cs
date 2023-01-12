@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
-public class ServiceProduct : Service<Product>, IServiceProduct
+public class ServiceProduct
+    : Service<Product>, IServiceProduct
 {
-    public ServiceProduct(NorthwindContext context)
-                            : base(context) { }
+    public ServiceProduct
+        (IEntityRepo<Product> entityRepo) 
+                        : base(entityRepo) { }
 }

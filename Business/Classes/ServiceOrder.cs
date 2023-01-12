@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
-public class ServiceOrder : Service<Order>, IServiceOrder
+public class ServiceOrder 
+    : Service<Order>, IServiceOrder
 {
-    public ServiceOrder(NorthwindContext context)
-                            : base(context) { }
+    public ServiceOrder
+        (IEntityRepo<Order> entityRepo) 
+                        : base(entityRepo) { }
 }

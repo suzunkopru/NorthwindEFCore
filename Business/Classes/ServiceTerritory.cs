@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
-public class ServiceTerritory : Service<Territory>, IServiceTerritory
+public class ServiceTerritory 
+    : Service<Territory>, IServiceTerritory
 {
-    public ServiceTerritory(NorthwindContext context)
-                            : base(context) { }
+    public ServiceTerritory
+        (IEntityRepo<Territory> entityRepo) 
+                        : base(entityRepo) { }
 }

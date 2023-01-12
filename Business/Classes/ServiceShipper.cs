@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
-public class ServiceShipper : Service<Shipper>, IServiceShipper
+public class ServiceShipper 
+    : Service<Shipper>, IServiceShipper
 {
-    public ServiceShipper(NorthwindContext context)
-                            : base(context) { }
+    public ServiceShipper
+        (IEntityRepo<Shipper> entityRepo) 
+                        : base(entityRepo) { }
 }

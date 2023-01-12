@@ -1,10 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
 public class ServiceVwProdCatSup : 
         Service<VwProdCatSup>, IServiceVwProdCatSup
 {
-    public ServiceVwProdCatSup(NorthwindContext context)
-        : base(context) { }
+    public ServiceVwProdCatSup
+        (IEntityRepo<VwProdCatSup> entityRepo) 
+                        : base(entityRepo) { }
 }

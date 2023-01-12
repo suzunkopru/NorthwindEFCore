@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
-public class ServiceSupplier : Service<Supplier>, IServiceSupplier
+public class ServiceSupplier 
+    : Service<Supplier>, IServiceSupplier
 {
-    public ServiceSupplier(NorthwindContext context)
-                            : base(context) { }
+    public ServiceSupplier
+        (IEntityRepo<Supplier> entityRepo) 
+                        : base(entityRepo) { }
 }

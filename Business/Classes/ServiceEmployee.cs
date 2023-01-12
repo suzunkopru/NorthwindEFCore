@@ -1,9 +1,11 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
+using DataAccess.Interfaces;
 using Entities.Models;
 namespace Business.Classes;
-public class ServiceEmployee : Service<Employee>, IServiceEmployee
+public class ServiceEmployee
+    : Service<Employee>, IServiceEmployee
 {
-    public ServiceEmployee(NorthwindContext context)
-                            : base(context) { }
+    public ServiceEmployee
+        (IEntityRepo<Employee> entityRepo) 
+                            : base(entityRepo) { }
 }

@@ -1,15 +1,16 @@
 ﻿using Business.Interfaces;
-using Entities.Context;
 using Core.DTOs;
+using DataAccess.Interfaces;
+using Entities.Context;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 namespace Business.Classes;
 public class ServiceDtoProductCatName
             : Service<Product>, IServiceDtoProductCatName
 {
+    public ServiceDtoProductCatName(IEntityRepo<Product> entityRepo) 
+        : base(entityRepo) { }
     private readonly NorthwindContext context= new();
-    public ServiceDtoProductCatName(NorthwindContext context)
-        : base(context) {}
     public IQueryable<DtoProductCatName> GetProductsCatName()
         => context.Products.AsQueryable().Join(context.Categories,
             pr => pr.CategoryId,
