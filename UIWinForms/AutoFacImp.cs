@@ -10,6 +10,8 @@ public static class AutoFacImp
         ContainerBuilder builder = new();
         builder.RegisterType<ServiceDtoProductCatName>()
                             .As<IServiceDtoProductCatName>();
+        builder.RegisterType<DalDtoProductCatName>()
+            .As<IDalDtoProductCatName>(); 
         builder.RegisterType<ServiceCategory>()
                             .As<IServiceCategory>();
         builder.RegisterType<ServiceProduct>()
