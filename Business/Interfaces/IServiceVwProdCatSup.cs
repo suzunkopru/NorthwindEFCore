@@ -1,4 +1,4 @@
 ﻿using Entities.Models;
-namespace DataAccess.Interfaces;
+namespace Business.Interfaces;
 public interface IServiceVwProdCatSup 
             : IService<VwProdCatSup> { }

@@ -1,5 +1,5 @@
-﻿ using System.Linq.Expressions;
-namespace DataAccess.Interfaces;
+﻿using System.Linq.Expressions;
+namespace Business.Interfaces;
 public interface IService<T>
     where T : class, new()
 {
@@ -7,7 +7,7 @@ public interface IService<T>
     IQueryable<T> Where
         (Expression<Func<T, bool>> predicate);
     Task<T> GetByIdAsync(int id);
-    Task<bool> 
+    Task<bool>
      AnyAsync(Expression<Func<T, bool>> predicate);
     Task AddAsync(T entity);
     Task AddRangeAsync(IQueryable<T> entities);

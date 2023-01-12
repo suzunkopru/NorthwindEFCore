@@ -1,9 +1,9 @@
-﻿using DataAccess.Interfaces;
+﻿using Business.Interfaces;
 using Entities.Context;
 using Core.DTOs;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-namespace DataAccess.Classes;
+namespace Business.Classes;
 public class ServiceDtoProductCatName
             : Service<Product>, IServiceDtoProductCatName
 {

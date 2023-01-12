@@ -1,7 +1,7 @@
-﻿using DataAccess.Interfaces;
+﻿using Business.Interfaces;
 using Entities.Context;
 using Entities.Models;
-namespace DataAccess.Classes;
+namespace Business.Classes;
 public class ServiceSupplier : Service<Supplier>, IServiceSupplier
 {
     public ServiceSupplier(NorthwindContext context)

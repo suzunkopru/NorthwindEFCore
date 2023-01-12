@@ -1,7 +1,7 @@
-﻿using DataAccess.Interfaces;
+﻿using Business.Interfaces;
 using Entities.Context;
 using Entities.Models;
-namespace DataAccess.Classes;
+namespace Business.Classes;
 public class ServiceShipper : Service<Shipper>, IServiceShipper
 {
     public ServiceShipper(NorthwindContext context)

@@ -1,6 +1,6 @@
 ﻿using Core.DTOs;
 using Entities.Models;
-namespace DataAccess.Interfaces;
+namespace Business.Interfaces;
 public interface IServiceDtoProductCatName : IService<Product>
 {
     IQueryable<DtoProductCatName> GetProductsCatName();
