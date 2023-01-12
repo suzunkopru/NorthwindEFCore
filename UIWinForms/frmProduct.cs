@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
 using Core.DTOs;
-using DataAccess.Interfaces;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using static System.Convert;
 namespace UIWinForms;
 public partial class frmProduct : Form
 {
-    private readonly IEntityRepo<Product> repoProduct;
     private readonly IServiceProduct srvProduct;
     private readonly IServiceDtoProductCatName srvPrdCatName;
     private readonly IServiceCategory srvCategory;
@@ -185,7 +183,7 @@ public partial class frmProduct : Form
     private void CUDControl(object sender = null)
     {
         var button = (Button)sender;
-        if (button == null || repoProduct == null) return;
+        if (button == null || srvProduct.GetAll() == null) return;
         btnEkle.Enabled = true;
         btnYeni.Enabled = true;
         btnSil.Enabled = true;

@@ -1,8 +1,8 @@
 ﻿@page "/ProductPage"
 @using Entities.Models
-@using DataAccess.Interfaces
 @using Core.DTOs
-@inject IDalProduct _dalProduct
+@using Business.Interfaces
+@inject IServiceProduct _srvProduct
 @inject AutoMapper.IMapper _mapper
 <PageTitle>Products List</PageTitle>
 <DxDataGrid Data=@GetAllProduct()
@@ -87,5 +87,5 @@
                     disc: nameof(Product.Discontinued),
                     @wdt: 10 + "px", pSize: 10);
     public List<DtoProduct> GetAllProduct()
-        => _mapper.Map<List<DtoProduct>>(_dalProduct.GetAll());
+        => _mapper.Map<List<DtoProduct>>(_srvProduct.GetAll());
 }

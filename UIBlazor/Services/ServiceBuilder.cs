@@ -1,4 +1,6 @@
-﻿using Core.Helper;
+﻿using Business.Classes;
+using Business.Interfaces;
+using Core.Helper;
 using DataAccess.Classes;
 using DataAccess.Interfaces;
 using Entities.Context;
@@ -13,8 +15,10 @@ public static class ServiceBuilder
         builder.Services.AddServerSideBlazor();
         builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddDbContext<NorthwindContext>();
-        builder.Services.AddScoped<IDalCategory, DalCategory>();
-        builder.Services.AddScoped<IDalProduct, DalProduct>();
+        builder.Services.AddScoped<IServiceCategory, ServiceCategory>();
+        builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
+        builder.Services.AddScoped
+            (typeof(IEntityRepo<>), typeof(EntityRepo<>));
         builder.Services.AddDevExpressBlazor();
         builder.Services.AddAutoMapper(typeof(MappingProfiles));
         return builder.Build(); ;
