@@ -1,19 +1,20 @@
 using Autofac;
+using Business.Interfaces;
 using Core.Helper;
-using DataAccess.Interfaces;
 namespace UIWinForms;
 internal static class Program
 {
-    [STAThread] 
+    [STAThread]
     static void Main()
     {
         ApplicationConfiguration.Initialize();
         Application.Run
-            (new frmProduct(
-                Configure().Resolve<IDalProduct>(),
-                Configure().Resolve<IDalDtoProductCatName>(),
-                Configure().Resolve<IDalCategory>(),
-                Configure().Resolve<IDalSupplier>(), 
-                new MappingProfiles().MatchMap()));
+        (new frmProduct(
+            Configure().Resolve<IServiceProduct>(),
+            Configure()
+                .Resolve<IServiceDtoProductCatName>(),
+            Configure().Resolve<IServiceCategory>(),
+            Configure().Resolve<IServiceSupplier>(),
+            new MappingProfiles().MatchMap()));
     }
 }
