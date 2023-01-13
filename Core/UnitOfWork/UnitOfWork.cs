@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Transactions;
 using IsolationLevel = System.Data.IsolationLevel;
-
 namespace Core.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
@@ -35,9 +34,9 @@ public class UnitOfWork : IUnitOfWork
                     _transaction.Commit();
                 }
             }
-            catch (TransactionAbortedException e)
+            catch (TransactionException e)
             {
-                _transaction.Dispose();
+                _transaction.RollbackAsync();
                 throw new Exception($"{e.Message}");
             }
     }
