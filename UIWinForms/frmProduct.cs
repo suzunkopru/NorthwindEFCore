@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using Business.Validations;
 using Core.DTOs;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -134,6 +135,12 @@ public partial class frmProduct : Form
         prd.UnitsOnOrder = ToInt16(txtUnitsOnOrder.Text);
         prd.ReorderLevel = ToInt16(txtReorderLevel.Text);
         prd.Discontinued = rdbDiscontinued.Checked;
+        var error = DtoProductValidator.ErrorList(prd);
+        if (error.Length > 0)
+        {
+            MessageBox.Show(error);
+            return;
+        }
         var prdMap = mapper.Map<Product>(prd);
         switch (cruType)
         {
