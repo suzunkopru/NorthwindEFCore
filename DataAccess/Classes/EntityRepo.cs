@@ -2,7 +2,6 @@
 using Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using Core.Helper;
 using Core.UnitOfWork;
 namespace DataAccess.Classes;
 public class EntityRepo<T> : IEntityRepo<T>
@@ -14,7 +13,6 @@ public class EntityRepo<T> : IEntityRepo<T>
     private NorthwindContext context;
     public EntityRepo(NorthwindContext context)
     {
-        TranLevel.TranWithNoLock();
         _unitOfWork = new UnitOfWork(context);
         _dbSet = (_context = context).Set<T>();
     }

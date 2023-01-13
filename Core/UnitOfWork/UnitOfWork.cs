@@ -1,11 +1,14 @@
 ﻿using Entities.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Transactions;
-using static Core.Helper.TranLevel;
+using IsolationLevel = System.Data.IsolationLevel;
+
 namespace Core.UnitOfWork;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly NorthwindContext _context;
-    private TransactionScope _transaction;
+    private IDbContextTransaction _transaction;
     public UnitOfWork(NorthwindContext context)
                         => _context = context;
     public void Commit() => WithTransaction(false);
@@ -16,12 +19,21 @@ public class UnitOfWork : IUnitOfWork
     }
     private void WithTransaction(bool isAsync = true)
     {
-        using (_transaction = TranWithNoLock())
+        using (_transaction =
+               _context.Database.BeginTransaction
+                   (IsolationLevel.ReadUncommitted))
             try
             {
-                if (!isAsync) _context.SaveChanges();
-                else _context.SaveChangesAsync();
-                _transaction.Complete();
+                if (isAsync)
+                {
+                    _context.SaveChangesAsync();
+                    _transaction.CommitAsync();
+                }
+                else
+                {
+                    _context.SaveChanges();
+                    _transaction.Commit();
+                }
             }
             catch (TransactionAbortedException e)
             {
