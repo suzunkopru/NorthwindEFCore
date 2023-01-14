@@ -90,7 +90,7 @@ public partial class frmProduct : Form
     }
     private void btnEkle_Click(object sender, EventArgs e)
     {
-        _ = CUDEntity(CUDType.Insert);
+        if (CUD(CUDType.Insert)) return;
         DgwFormat(dgwProducts);
         MessageBox.Show($@"{txtProductName.Text} Eklendi");
         dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
@@ -101,7 +101,7 @@ public partial class frmProduct : Form
     private void btnGuncelle_Click(object sender, EventArgs e)
     {
         int satir = dgwProducts.SelectedRows[0].Index;
-        _ = CUDEntity(CUDType.Update);
+        if (CUD(CUDType.Update)) return;
         DgwFormat(dgwProducts);
         string old = dgwProducts.CurrentRow.Cells[1].Value.ToString();
         MessageBox.Show($"{old} => {txtProductName.Text} olarak Güncellendi");
@@ -113,7 +113,7 @@ public partial class frmProduct : Form
     private void btnSil_Click(object sender, EventArgs e)
     {
         if (dgwProducts.CurrentRow == null) return;
-        _ = CUDEntity(CUDType.Delete);
+        if (CUD(CUDType.Delete)) return;
         DgwFormat(dgwProducts);
         MessageBox.Show($"{txtProductName.Text} Silindi");
         dgwProducts.DataSource = mapper.Map<List<DtoProduct>>(
@@ -121,6 +121,8 @@ public partial class frmProduct : Form
         dgwProducts.Rows[^1].Selected = true;
         dgwProducts.CurrentCell = dgwProducts.Rows[^1].Cells[1];
     }
+    private bool CUD(CUDType cruType) => CUDEntity(cruType)
+                    .Status != TaskStatus.RanToCompletion;
     private async Task CUDEntity(CUDType cruType)
     {
         var prd = new DtoProduct();
